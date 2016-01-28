@@ -1,20 +1,22 @@
 
 
-CREATE TABLE CUSTOMER( customerId INT NOT NULL AUTO INCREMENT, 
+CREATE TABLE CUSTOMER( customerId INT NOT NULL AUTO_INCREMENT, 
                        customerName VARCHAR(62) NOT NULL,
                        customerAddress VARCHAR(128),
-                       customerType VARCHAR(10) CHECK('RETAIL', 'COMMERCIAL'),
+                       customerType VARCHAR(10) NOT NULL,
                        PRIMARY KEY(customerId)
                     );
 
 CREATE TABLE TICKER_GROUP(tickerGroupId INT NOT NULL,
-                          tickerGroupName VARCHAR(32)
+                          tickerGroupName VARCHAR(32),
+                          PRIMARY KEY(tickerGroupId)
                          );
 
-CREATE TABLE TICKER (tickerName VARCHAR(32) NOT NULL,
+CREATE TABLE TICKER (tickerSymbol VARCHAR(32) NOT NULL,
                      tickerDescription VARCHAR(128) NOT NULL,
                      tickerGroupId INT NOT NULL,
-                     CONSTRAINT FOREIGN KEY(tickerGroupId) REFERENCES TICKER_GROUP(tickerGroupId)
+                     CONSTRAINT FOREIGN KEY(tickerGroupId) REFERENCES TICKER_GROUP(tickerGroupId),
+                     PRIMARY KEY(tickerSymbol)
                     );
 
 
@@ -22,7 +24,7 @@ CREATE TABLE CUSTOMER_PORTFOLIO(customerId INT NOT NULL,
                                 tickerSymbol VARCHAR(32) NOT NULL,
                                 lowerTrigger FLOAT,
                                 higherTrigger FLOAT,
-                                orderStatus VARCHAR(8) CHECK('NEW', 'HOLD', 'PARTIAL','COMPLETE'),
+                                orderStatus VARCHAR(8) NOT NULL,
 				CONSTRAINT FOREIGN KEY(customerId) REFERENCES CUSTOMER(customerId),
 				CONSTRAINT FOREIGN KEY(tickerSymbol) REFERENCES TICKER(tickerSymbol)
                                );
