@@ -32,9 +32,9 @@ CREATE TABLE CUSTOMER_PORTFOLIO(customerId INT NOT NULL,
 
 CREATE TABLE ORDER_BOOK ( customerId VARCHAR(32) NOT NULL,
                           tickerSymbol VARCHAR(32) NOT NULL,
-                          orderType VARCHAR(6) NOT NULL CHECK('LIMIT', 'MARKET'),
+                          orderType VARCHAR(6) NOT NULL,
                           numberOfUnits INT NOT NULL,
-                          action VARCHAR(4) CHECK CONSTRAINT('BUY','SELL'),
+                          action VARCHAR(4) NOT NULL,
                           unitPrice FLOAT NOT NULL,
                           timeOfAction TIMESTAMP NOT NULL
                         ); 
