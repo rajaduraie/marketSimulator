@@ -7,12 +7,18 @@ use ZMQ::FFI::Constants qw(ZMQ_SUB);
 
 use constant FILTER => "STRAY";
 
+my $port = $ARGV[0];
+
+unless($port) {
+  die "Port number has to be passed as parameter";
+}
+
 # Socket to talk to server
 say "Collecting STRAYS from stock feed...";
 
 my $context    = ZMQ::FFI->new();
 my $subscriber = $context->socket(ZMQ_SUB);
-$subscriber->connect("tcp://localhost:5556");
+$subscriber->connect("tcp://localhost:$port");
 
 
 $subscriber->subscribe(FILTER);

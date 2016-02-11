@@ -13,27 +13,24 @@ BEGIN {
 
 use lib "$cwd/lib";
 use Base;
+use Utils;
 
 # You can pass the conf fie if you want
 my $conf_file = $ARGV[0] // "feed.conf";
 
-# Get configurations values in this hash
+# Get configurations values in this hash reference
 
-my %conf = ();
+my $conf = Utils->read_config($conf_file); 
 
-open (CONF,'<',$conf_file) or die "Unable to open $conf_file file: $!";
-
-while(my $line = <CONF>) {
-  chomp($line);
-  my($key, $value) = split("=",$line);
-  $conf{$key} = $value;
+unless($conf_file) { 
+  croak "Error opening config file";
 }
-
 my $count                     = 0;
-my $average_elements          = $conf{averageElementCount} // 10;
-my $allowed_percent_deviation = $conf{allowedPercentageDeviation} // 1;
-my $log_level                 = $conf{logLevel} // 4;
-my $threshold_percentage      = $conf{thresholdPercentage} // 0.1;
+my $average_elements          = $conf->{averageElementCount} // 10;
+my $allowed_percent_deviation = $conf->{allowedPercentageDeviation} // 1;
+my $log_level                 = $conf->{logLevel} // 4;
+my $threshold_percentage      = $conf->{thresholdPercentage} // 0.1;
+my $publish_port              = $conf->{publish_port} // 5556;
 
 my $feeder = Base->new( log_level => $log_level );
 
@@ -52,7 +49,7 @@ use ZMQ::FFI::Constants qw(ZMQ_PUB);
 
 my $context   = ZMQ::FFI->new();
 my $publisher = $context->socket(ZMQ_PUB);
-$publisher->bind("tcp://*:5556");
+$publisher->bind("tcp://*:$publish_port");
 
 
 # Get the ticker table object 
