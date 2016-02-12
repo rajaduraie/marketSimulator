@@ -13,23 +13,19 @@ use Moose;
 has   'log_level' => (
       is      =>'ro',
       isa     => 'Int',
-      default => sub {
-           return 3;
-          }
+      default => 3
       );
           
 has   'log_location' => (
       is => 'ro',
-      default => sub {
-        return "$ENV{HOME}".'/logs/';
-        }
+      default => $ENV{HOME}.'/logs/'
       );
 
 has   'user_agent' => (
       is => 'ro',
       default => sub {
-          Mojo::UserAgent->new();
-        }
+        return Mojo::UserAgent->new();
+      }
       );      
 
 has   'log' => (
